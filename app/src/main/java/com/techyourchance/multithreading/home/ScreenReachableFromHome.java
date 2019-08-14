@@ -1,7 +1,7 @@
 package com.techyourchance.multithreading.home;
 
 public enum ScreenReachableFromHome {
-    TEMP("Temp");
+    EXERCISE_1("Exercise 1");
 
     private String mName;
 
