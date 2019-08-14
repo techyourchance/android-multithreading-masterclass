@@ -1,6 +1,7 @@
 package com.techyourchance.multithreading.common;
 
 import com.techyourchance.fragmenthelper.FragmentHelper;
+import com.techyourchance.multithreading.exercises.exercise1.Exercise1Fragment;
 import com.techyourchance.multithreading.home.HomeFragment;
 
 public class ScreensNavigator {
@@ -11,15 +12,19 @@ public class ScreensNavigator {
         mFragmentHelper = fragmentHelper;
     }
 
-    public void toHomeScreen() {
-        mFragmentHelper.replaceFragmentAndClearHistory(HomeFragment.newInstance());
-    }
-
     public void navigateBack() {
         mFragmentHelper.navigateBack();
     }
 
     public void navigateUp() {
         mFragmentHelper.navigateUp();
+    }
+
+    public void toHomeScreen() {
+        mFragmentHelper.replaceFragmentAndClearHistory(HomeFragment.newInstance());
+    }
+
+    public void toExercise1Screen() {
+        mFragmentHelper.replaceFragment(Exercise1Fragment.newInstance());
     }
 }

@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.techyourchance.fragmenthelper.FragmentContainerWrapper;
-import com.techyourchance.fragmenthelper.FragmentHelper;
 import com.techyourchance.multithreading.common.BaseFragment;
 import com.techyourchance.multithreading.R;
 import com.techyourchance.multithreading.common.ScreensNavigator;
@@ -59,8 +57,8 @@ public class HomeFragment extends BaseFragment implements HomeArrayAdapter.Liste
     @Override
     public void onScreenClicked(ScreenReachableFromHome screenReachableFromHome) {
         switch (screenReachableFromHome) {
-            case TEMP:
-                Toast.makeText(getContext(), "Temp clicked", Toast.LENGTH_SHORT).show();
+            case EXERCISE_1:
+                mScreensNavigator.toExercise1Screen();
                 break;
         }
     }

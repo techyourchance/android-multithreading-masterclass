@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.techyourchance.fragmenthelper.HierarchicalFragment;
 import com.techyourchance.multithreading.common.dependencyinjection.PresentationCompositionRoot;
+import com.techyourchance.multithreading.home.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,12 @@ public abstract class BaseFragment extends Fragment implements HierarchicalFragm
             mPresentationCompositionRoot = new PresentationCompositionRoot(requireActivity());
         }
         return mPresentationCompositionRoot;
+    }
+
+    @Nullable
+    @Override
+    public Fragment getHierarchicalParentFragment() {
+        return HomeFragment.newInstance();
     }
 
     @Override
