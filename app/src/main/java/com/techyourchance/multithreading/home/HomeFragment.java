@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.techyourchance.multithreading.common.BaseFragment;
 import com.techyourchance.multithreading.R;
@@ -65,6 +64,9 @@ public class HomeFragment extends BaseFragment implements HomeArrayAdapter.Liste
                 break;
             case UI_THREAD_DEMONSTRATION:
                 mScreensNavigator.toUiThreadDemonstration();
+                break;
+            case UI_HANDLER_DEMONSTRATION:
+                mScreensNavigator.toUiHandlerDemonstration();
                 break;
         }
     }
