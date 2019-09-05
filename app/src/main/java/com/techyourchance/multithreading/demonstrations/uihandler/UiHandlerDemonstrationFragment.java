@@ -34,7 +34,7 @@ public class UiHandlerDemonstrationFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercise_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_ui_handler_demonstration, container, false);
 
         mBtnCountIterations = view.findViewById(R.id.btn_count_iterations);
         mBtnCountIterations.setOnClickListener(new View.OnClickListener() {
