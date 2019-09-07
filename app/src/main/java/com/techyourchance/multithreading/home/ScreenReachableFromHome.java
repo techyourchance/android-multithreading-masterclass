@@ -5,7 +5,8 @@ public enum ScreenReachableFromHome {
     EXERCISE_2("Exercise 2"),
     UI_THREAD_DEMONSTRATION("UI Thread Demo"),
     UI_HANDLER_DEMONSTRATION("UI Handler Demo"),
-    CUSTOM_HANDLER_DEMONSTRATION("Custom Handler Demo")
+    CUSTOM_HANDLER_DEMONSTRATION("Custom Handler Demo"),
+    EXERCISE_3("Exercise 3")
     ;
 
     private String mName;

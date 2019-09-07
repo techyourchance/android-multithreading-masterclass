@@ -6,6 +6,7 @@ import com.techyourchance.multithreading.demonstrations.uihandler.UiHandlerDemon
 import com.techyourchance.multithreading.demonstrations.uithread.UiThreadDemonstrationFragment;
 import com.techyourchance.multithreading.exercises.exercise1.Exercise1Fragment;
 import com.techyourchance.multithreading.exercises.exercise2.Exercise2Fragment;
+import com.techyourchance.multithreading.exercises.exercise3.Exercise3Fragment;
 import com.techyourchance.multithreading.home.HomeFragment;
 
 public class ScreensNavigator {
@@ -46,5 +47,9 @@ public class ScreensNavigator {
 
     public void toCustomHandlerDemonstration() {
         mFragmentHelper.replaceFragment(CustomHandlerDemonstrationFragment.newInstance());
+    }
+
+    public void toExercise3Screen() {
+        mFragmentHelper.replaceFragment(Exercise3Fragment.newInstance());
     }
 }
