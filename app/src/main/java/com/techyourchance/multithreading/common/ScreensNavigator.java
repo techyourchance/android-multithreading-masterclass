@@ -8,6 +8,7 @@ import com.techyourchance.multithreading.demonstrations.uithread.UiThreadDemonst
 import com.techyourchance.multithreading.exercises.exercise1.Exercise1Fragment;
 import com.techyourchance.multithreading.exercises.exercise2.Exercise2Fragment;
 import com.techyourchance.multithreading.exercises.exercise3.Exercise3Fragment;
+import com.techyourchance.multithreading.exercises.exercise4.Exercise4Fragment;
 import com.techyourchance.multithreading.home.HomeFragment;
 
 public class ScreensNavigator {
@@ -56,5 +57,9 @@ public class ScreensNavigator {
 
     public void toAtomicityDemonstration() {
         mFragmentHelper.replaceFragment(AtomicityDemonstrationFragment.newInstance());
+    }
+
+    public void toExercise4Screen() {
+        mFragmentHelper.replaceFragment(Exercise4Fragment.newInstance());
     }
 }

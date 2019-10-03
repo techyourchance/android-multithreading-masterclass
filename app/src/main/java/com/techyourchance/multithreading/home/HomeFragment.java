@@ -77,6 +77,9 @@ public class HomeFragment extends BaseFragment implements HomeArrayAdapter.Liste
             case ATOMICITY_DEMONSTRATION:
                 mScreensNavigator.toAtomicityDemonstration();
                 break;
+            case EXERCISE_4:
+                mScreensNavigator.toExercise4Screen();
+                break;
         }
     }
 }
