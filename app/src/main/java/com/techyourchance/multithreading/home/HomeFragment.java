@@ -83,6 +83,9 @@ public class HomeFragment extends BaseFragment implements HomeArrayAdapter.Liste
             case THREAD_WAIT_DEMONSTRATION:
                 mScreensNavigator.toThreadWaitDemonstration();
                 break;
+            case EXERCISE_5:
+                mScreensNavigator.toExercise5Screen();
+                break;
         }
     }
 }
