@@ -3,6 +3,7 @@ package com.techyourchance.multithreading.common;
 import com.techyourchance.fragmenthelper.FragmentHelper;
 import com.techyourchance.multithreading.demonstrations.atomicity.AtomicityDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.customhandler.CustomHandlerDemonstrationFragment;
+import com.techyourchance.multithreading.demonstrations.designthread.DesignWithThreadsDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.threadwait.ThreadWaitDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.uihandler.UiHandlerDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.uithread.UiThreadDemonstrationFragment;
@@ -71,5 +72,9 @@ public class ScreensNavigator {
 
     public void toExercise5Screen() {
         mFragmentHelper.replaceFragment(Exercise5Fragment.newInstance());
+    }
+
+    public void toDesignWithThreadsDemonstration() {
+        mFragmentHelper.replaceFragment(DesignWithThreadsDemonstrationFragment.newInstance());
     }
 }
