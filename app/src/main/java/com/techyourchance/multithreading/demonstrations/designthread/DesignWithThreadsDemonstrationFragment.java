@@ -44,16 +44,13 @@ public class DesignWithThreadsDemonstrationFragment extends BaseFragment impleme
         mTxtReceivedMessagesCount = view.findViewById(R.id.txt_received_messages_count);
         mTxtExecutionTime = view.findViewById(R.id.txt_execution_time);
 
-        mBtnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBtnStart.setEnabled(false);
-                mTxtReceivedMessagesCount.setText("");
-                mTxtExecutionTime.setText("");
-                mProgressBar.setVisibility(View.VISIBLE);
+        mBtnStart.setOnClickListener(v -> {
+            mBtnStart.setEnabled(false);
+            mTxtReceivedMessagesCount.setText("");
+            mTxtExecutionTime.setText("");
+            mProgressBar.setVisibility(View.VISIBLE);
 
-                mProducerConsumerBenchmarkUseCase.startBenchmarkAndNotify();
-            }
+            mProducerConsumerBenchmarkUseCase.startBenchmarkAndNotify();
         });
 
         return view;
