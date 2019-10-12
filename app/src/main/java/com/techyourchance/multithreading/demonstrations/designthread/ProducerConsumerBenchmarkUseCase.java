@@ -54,84 +54,64 @@ public class ProducerConsumerBenchmarkUseCase extends BaseObservable<ProducerCon
         }
 
         // watcher-reporter thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (LOCK) {
-                    while (mNumOfFinishedConsumers < NUM_OF_MESSAGES) {
-                        try {
-                            LOCK.wait();
-                        } catch (InterruptedException e) {
-                            return;
-                        }
+        new Thread(() -> {
+            synchronized (LOCK) {
+                while (mNumOfFinishedConsumers < NUM_OF_MESSAGES) {
+                    try {
+                        LOCK.wait();
+                    } catch (InterruptedException e) {
+                        return;
                     }
                 }
-                notifySuccess();
             }
+            notifySuccess();
         }).start();
 
         // producers init thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < NUM_OF_MESSAGES; i++) {
-                    startNewProducer(i);
-                }
+        new Thread(() -> {
+            for (int i = 0; i < NUM_OF_MESSAGES; i++) {
+                startNewProducer(i);
             }
         }).start();
 
         // consumers init thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < NUM_OF_MESSAGES; i++) {
-                    startNewConsumer();
-                }
+        new Thread(() -> {
+            for (int i = 0; i < NUM_OF_MESSAGES; i++) {
+                startNewConsumer();
             }
         }).start();
     }
 
 
     private void startNewProducer(final int index) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mBlockingQueue.put(index);
-            }
-        }).start();
+        new Thread(() -> mBlockingQueue.put(index)).start();
     }
 
     private void startNewConsumer() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int message = mBlockingQueue.take();
-                synchronized (LOCK) {
-                    if (message != -1) {
-                        mNumOfReceivedMessages++;
-                    }
-                    mNumOfFinishedConsumers++;
-                    LOCK.notifyAll();
+        new Thread(() -> {
+            int message = mBlockingQueue.take();
+            synchronized (LOCK) {
+                if (message != -1) {
+                    mNumOfReceivedMessages++;
                 }
+                mNumOfFinishedConsumers++;
+                LOCK.notifyAll();
             }
         }).start();
     }
 
     private void notifySuccess() {
-        mUiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Result result;
-                synchronized (LOCK) {
-                     result =
-                            new Result(
-                                    System.currentTimeMillis() - mStartTimestamp,
-                                    mNumOfReceivedMessages
-                            );
-                }
-                for (Listener listener : getListeners()) {
-                    listener.onBenchmarkCompleted(result);
-                }
+        mUiHandler.post(() -> {
+            Result result;
+            synchronized (LOCK) {
+                 result =
+                        new Result(
+                                System.currentTimeMillis() - mStartTimestamp,
+                                mNumOfReceivedMessages
+                        );
+            }
+            for (Listener listener : getListeners()) {
+                listener.onBenchmarkCompleted(result);
             }
         });
     }
