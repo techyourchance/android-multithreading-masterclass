@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.techyourchance.fragmenthelper.HierarchicalFragment;
+import com.techyourchance.multithreading.MyApplication;
 import com.techyourchance.multithreading.common.dependencyinjection.PresentationCompositionRoot;
 import com.techyourchance.multithreading.home.HomeFragment;
 
@@ -17,7 +18,10 @@ public abstract class BaseFragment extends Fragment implements HierarchicalFragm
 
     protected final PresentationCompositionRoot getCompositionRoot() {
         if (mPresentationCompositionRoot == null) {
-            mPresentationCompositionRoot = new PresentationCompositionRoot(requireActivity());
+            mPresentationCompositionRoot = new PresentationCompositionRoot(
+                    requireActivity(),
+                    ((MyApplication)requireActivity().getApplication()).getApplicationCompositionRoot()
+            );
         }
         return mPresentationCompositionRoot;
     }

@@ -33,7 +33,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPresentationCompositionRoot = new PresentationCompositionRoot(this);
+        mPresentationCompositionRoot = new PresentationCompositionRoot(
+                this,
+                ((MyApplication)getApplication()).getApplicationCompositionRoot()
+        );
+
         mScreensNavigator = mPresentationCompositionRoot.getScreensNavigator();
 
         mBtnBack = findViewById(R.id.btn_back);
