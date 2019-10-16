@@ -1,19 +1,10 @@
 package com.techyourchance.multithreading.demonstrations.designthreadpool;
 
 import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 import com.techyourchance.multithreading.common.BaseObservable;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProducerConsumerBenchmarkUseCase extends BaseObservable<ProducerConsumerBenchmarkUseCase.Listener> {
@@ -45,32 +36,13 @@ public class ProducerConsumerBenchmarkUseCase extends BaseObservable<ProducerCon
 
     private final Object LOCK = new Object();
 
-    private final Handler mUiHandler = new Handler(Looper.getMainLooper());
+    private final Handler mUiHandler;
 
     private final AtomicInteger mNumOfThreads = new AtomicInteger(0);
 
     private final MyBlockingQueue mBlockingQueue = new MyBlockingQueue(BLOCKING_QUEUE_CAPACITY);
 
-    private final ThreadPoolExecutor mThreadPool = new ThreadPoolExecutor(
-            10,
-            Integer.MAX_VALUE,
-            10,
-            TimeUnit.SECONDS,
-            new SynchronousQueue<>(),
-            new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable r) {
-                    Log.d("ThreadFactory",
-                          String.format("size %s, active count %s, queue remaining %s",
-                                        mThreadPool.getPoolSize(),
-                                        mThreadPool.getActiveCount(),
-                                        mThreadPool.getQueue().remainingCapacity()
-                          )
-                    );
-                    return new Thread(r);
-                }
-            }
-    );
+    private final ThreadPoolExecutor mThreadPool;
 
     private int mNumOfFinishedConsumers;
 
@@ -78,6 +50,10 @@ public class ProducerConsumerBenchmarkUseCase extends BaseObservable<ProducerCon
 
     private long mStartTimestamp;
 
+    public ProducerConsumerBenchmarkUseCase(Handler uiHandler, ThreadPoolExecutor threadPool) {
+        mUiHandler = uiHandler;
+        mThreadPool = threadPool;
+    }
 
     public void startBenchmarkAndNotify() {
 
