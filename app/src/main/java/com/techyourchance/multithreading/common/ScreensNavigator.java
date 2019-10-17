@@ -17,6 +17,7 @@ import com.techyourchance.multithreading.exercises.exercise4.Exercise4Fragment;
 import com.techyourchance.multithreading.exercises.exercise5.Exercise5Fragment;
 import com.techyourchance.multithreading.exercises.exercise6.Exercise6Fragment;
 import com.techyourchance.multithreading.exercises.exercise7.Exercise7Fragment;
+import com.techyourchance.multithreading.exercises.exercise8.Exercise8Fragment;
 import com.techyourchance.multithreading.home.HomeFragment;
 
 public class ScreensNavigator {
@@ -101,5 +102,9 @@ public class ScreensNavigator {
 
     public void toThreadPosterDemonstration() {
         mFragmentHelper.replaceFragment(DesignWithThreadPosterDemonstrationFragment.newInstance());
+    }
+
+    public void toExercise8Screen() {
+        mFragmentHelper.replaceFragment(Exercise8Fragment.newInstance());
     }
 }

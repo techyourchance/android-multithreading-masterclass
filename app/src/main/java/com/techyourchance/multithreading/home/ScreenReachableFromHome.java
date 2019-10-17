@@ -17,6 +17,7 @@ public enum ScreenReachableFromHome {
     EXERCISE_7("Exercise 7"),
     DESIGN_WITH_ASYNCTASK_DEMONSTRATION("Design Demo: AsyncTask"),
     DESIGN_WITH_THREAD_POSTER_DEMONSTRATION("Design Demo: ThreadPoster"),
+    EXERCISE_8("Exercise 8"),
     ;
 
     private String mName;
