@@ -28,5 +28,6 @@ dependencies {
     implementation project(':fragmenthelper')
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.techyourchance:threadposter:1.0.1'
     testImplementation 'junit:junit:4.12'
 }
