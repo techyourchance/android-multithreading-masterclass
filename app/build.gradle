@@ -28,5 +28,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.techyourchance:fragmenthelper:0.8.0'
+    implementation 'com.techyourchance.threadposter:threadposter:0.8.3'
     testImplementation 'junit:junit:4.12'
 }

@@ -6,6 +6,7 @@ import com.techyourchance.multithreading.demonstrations.customhandler.CustomHand
 import com.techyourchance.multithreading.demonstrations.designasynctask.DesignWithAsyncTaskDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.designthread.DesignWithThreadsDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.designthreadpool.DesignWithThreadPoolDemonstrationFragment;
+import com.techyourchance.multithreading.demonstrations.designthreadposter.DesignWithThreadPosterDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.threadwait.ThreadWaitDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.uihandler.UiHandlerDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.uithread.UiThreadDemonstrationFragment;
@@ -96,5 +97,9 @@ public class ScreensNavigator {
 
     public void toDesignWithAsyncTaskDemonstration() {
         mFragmentHelper.replaceFragment(DesignWithAsyncTaskDemonstrationFragment.newInstance());
+    }
+
+    public void toThreadPosterDemonstration() {
+        mFragmentHelper.replaceFragment(DesignWithThreadPosterDemonstrationFragment.newInstance());
     }
 }
