@@ -107,6 +107,9 @@ public class HomeFragment extends BaseFragment implements HomeArrayAdapter.Liste
             case EXERCISE_8:
                 mScreensNavigator.toExercise8Screen();
                 break;
+            case DESIGN_WITH_RX_JAVA_DEMONSTRATION:
+                mScreensNavigator.toDesignWithRxJavaDemonstration();
+                break;
         }
     }
 }
