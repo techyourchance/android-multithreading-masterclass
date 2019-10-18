@@ -18,6 +18,7 @@ public enum ScreenReachableFromHome {
     DESIGN_WITH_ASYNCTASK_DEMONSTRATION("Design Demo: AsyncTask"),
     DESIGN_WITH_THREAD_POSTER_DEMONSTRATION("Design Demo: ThreadPoster"),
     EXERCISE_8("Exercise 8"),
+    DESIGN_WITH_RX_JAVA_DEMONSTRATION("Design Demo: RxJava"),
     ;
 
     private String mName;
