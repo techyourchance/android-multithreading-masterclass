@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class DesignWithRxJavaDemonstrationFragment extends BaseFragment {
@@ -29,6 +30,8 @@ public class DesignWithRxJavaDemonstrationFragment extends BaseFragment {
     private TextView mTxtExecutionTime;
 
     private ProducerConsumerBenchmarkUseCase mProducerConsumerBenchmarkUseCase;
+
+    private @Nullable Disposable mDisposable;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class DesignWithRxJavaDemonstrationFragment extends BaseFragment {
             mTxtExecutionTime.setText("");
             mProgressBar.setVisibility(View.VISIBLE);
 
-            mProducerConsumerBenchmarkUseCase.startBenchmark()
+            mDisposable = mProducerConsumerBenchmarkUseCase.startBenchmark()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onBenchmarkCompleted);
@@ -67,15 +70,11 @@ public class DesignWithRxJavaDemonstrationFragment extends BaseFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        //mProducerConsumerBenchmarkUseCase.registerListener(this);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        //mProducerConsumerBenchmarkUseCase.unregisterListener(this);
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
     }
 
     public void onBenchmarkCompleted(ProducerConsumerBenchmarkUseCase.Result result) {
