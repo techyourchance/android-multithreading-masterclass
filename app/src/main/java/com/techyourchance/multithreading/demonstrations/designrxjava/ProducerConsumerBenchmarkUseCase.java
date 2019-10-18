@@ -1,8 +1,12 @@
 package com.techyourchance.multithreading.demonstrations.designrxjava;
 
+import android.util.Log;
+
 import java.util.concurrent.Callable;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ProducerConsumerBenchmarkUseCase {
 
@@ -27,83 +31,25 @@ public class ProducerConsumerBenchmarkUseCase {
     private static final int NUM_OF_MESSAGES = 1000;
     private static final int BLOCKING_QUEUE_CAPACITY = 5;
 
-    private final Object LOCK = new Object();
-
     private final MyBlockingQueue mBlockingQueue = new MyBlockingQueue(BLOCKING_QUEUE_CAPACITY);
-
-    private int mNumOfFinishedConsumers;
-
-    private int mNumOfReceivedMessages;
 
     private long mStartTimestamp;
 
 
     public Observable<Result> startBenchmark() {
-        return Observable.fromCallable(
-                new Callable<Result>() {
-                    @Override
-                    public Result call() throws Exception {
-
-                        synchronized (LOCK) {
-                            mNumOfReceivedMessages = 0;
-                            mNumOfFinishedConsumers = 0;
-                            mStartTimestamp = System.currentTimeMillis();
-                        }
-
-                        // producers init thread
-                        new Thread(() -> {
-                            for (int i = 0; i < NUM_OF_MESSAGES; i++) {
-                                startNewProducer(i);
-                            }
-                        }).start();
-
-                        // consumers init thread
-                        new Thread(() -> {
-                            for (int i = 0; i < NUM_OF_MESSAGES; i++) {
-                                startNewConsumer();
-                            }
-                        }).start();
-
-                        synchronized (LOCK) {
-                            while (mNumOfFinishedConsumers < NUM_OF_MESSAGES) {
-                                try {
-                                    LOCK.wait();
-                                } catch (InterruptedException e) {
-                                    return new Result(
-                                            System.currentTimeMillis() - mStartTimestamp,
-                                            -1
-                                    );
-                                }
-                            }
-
-                            return new Result(
-                                    System.currentTimeMillis() - mStartTimestamp,
-                                    mNumOfReceivedMessages
-                            );
-                        }
-
-                    }
-                }
-        );
-
-    }
-
-
-    private void startNewProducer(final int index) {
-        new Thread(() -> mBlockingQueue.put(index)).start();
-    }
-
-    private void startNewConsumer() {
-        new Thread(() -> {
-            int message = mBlockingQueue.take();
-            synchronized (LOCK) {
-                if (message != -1) {
-                    mNumOfReceivedMessages++;
-                }
-                mNumOfFinishedConsumers++;
-                LOCK.notifyAll();
-            }
-        }).start();
+        return Flowable.range(0, NUM_OF_MESSAGES)
+                        .flatMap(id -> Flowable
+                                .fromCallable(() -> { mBlockingQueue.put(id); return id; }) // <-- generate message
+                                .subscribeOn(Schedulers.io())
+                        )
+                        .parallel(NUM_OF_MESSAGES)
+                        .runOn(Schedulers.io())
+                        .doOnNext(msg -> { mBlockingQueue.take(); })  // <-- process message
+                        .sequential()
+                        .count()
+                        .doOnSubscribe(s -> { mStartTimestamp = System.currentTimeMillis(); })
+                        .map(cnt -> new Result(System.currentTimeMillis() - mStartTimestamp, cnt.intValue()))
+                        .toObservable();
     }
 
 
