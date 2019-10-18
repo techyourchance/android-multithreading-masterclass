@@ -69,7 +69,10 @@ public class ProducerConsumerBenchmarkUseCase {
                                 try {
                                     LOCK.wait();
                                 } catch (InterruptedException e) {
-                                    return null;
+                                    return new Result(
+                                            System.currentTimeMillis() - mStartTimestamp,
+                                            -1
+                                    );
                                 }
                             }
 
