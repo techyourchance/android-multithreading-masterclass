@@ -8,10 +8,17 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <View
+        android:id="@+id/view_ui_non_blocked_indicator"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@color/colorAccent"/>
+
     <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Start messaging"/>
 
     <ProgressBar
