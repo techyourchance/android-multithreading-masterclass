@@ -4,14 +4,12 @@ import android.os.Handler
 import android.os.Looper
 
 import com.techyourchance.multithreading.common.BaseObservable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class ProducerConsumerBenchmarkUseCase : BaseObservable<ProducerConsumerBenchmarkUseCase.Listener>() {
-
-    interface Listener {
-        fun onBenchmarkCompleted(result: Result)
-    }
+class ProducerConsumerBenchmarkUseCase {
 
     class Result(val executionTime: Long, val numOfReceivedMessages: Int)
 
@@ -28,41 +26,48 @@ class ProducerConsumerBenchmarkUseCase : BaseObservable<ProducerConsumerBenchmar
 
     private var startTimestamp: Long = 0
 
-    fun startBenchmarkAndNotify() {
+    suspend fun startBenchmark() : Result {
 
-        reentrantLock.withLock {
-            numOfReceivedMessages = 0
-            numOfFinishedConsumers = 0
-            startTimestamp = System.currentTimeMillis()
-        }
+        withContext(Dispatchers.IO) {
 
-        // watcher-reporter thread
-        Thread {
+            reentrantLock.withLock {
+                numOfReceivedMessages = 0
+                numOfFinishedConsumers = 0
+                startTimestamp = System.currentTimeMillis()
+            }
+
+            // producers init thread
+            Thread {
+                for (i in 0 until NUM_OF_MESSAGES) {
+                    startNewProducer(i)
+                }
+            }.start()
+
+            // consumers init thread
+            Thread {
+                for (i in 0 until NUM_OF_MESSAGES) {
+                    startNewConsumer()
+                }
+            }.start()
+
+
             reentrantLock.withLock {
                 while (numOfFinishedConsumers < NUM_OF_MESSAGES) {
                     try {
                         lockCondition.await()
                     } catch (e: InterruptedException) {
-                        return@Thread
+                        return@withLock
                     }
                 }
             }
-            notifySuccess()
-        }.start()
+        }
 
-        // producers init thread
-        Thread {
-            for (i in 0 until NUM_OF_MESSAGES) {
-                startNewProducer(i)
-            }
-        }.start()
-
-        // consumers init thread
-        Thread {
-            for (i in 0 until NUM_OF_MESSAGES) {
-                startNewConsumer()
-            }
-        }.start()
+        reentrantLock.withLock {
+            return Result(
+                    System.currentTimeMillis() - startTimestamp,
+                    numOfReceivedMessages
+            )
+        }
     }
 
 
@@ -83,20 +88,6 @@ class ProducerConsumerBenchmarkUseCase : BaseObservable<ProducerConsumerBenchmar
         }.start()
     }
 
-    private fun notifySuccess() {
-        uiHandler.post {
-            lateinit var result: Result
-            reentrantLock.withLock {
-                result = Result(
-                        System.currentTimeMillis() - startTimestamp,
-                        numOfReceivedMessages
-                )
-            }
-            for (listener in listeners) {
-                listener.onBenchmarkCompleted(result)
-            }
-        }
-    }
 
     companion object {
         private const val NUM_OF_MESSAGES = 1000
