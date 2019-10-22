@@ -2,15 +2,12 @@ package com.techyourchance.multithreading.demonstrations.designcoroutines
 
 import android.os.Handler
 import android.os.Looper
-
-import com.techyourchance.multithreading.common.BaseObservable
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 
 class ProducerConsumerBenchmarkUseCase {
 
@@ -20,7 +17,9 @@ class ProducerConsumerBenchmarkUseCase {
 
     private val blockingQueue = MyBlockingQueue(BLOCKING_QUEUE_CAPACITY)
 
-    private var numOfReceivedMessages: AtomicInteger = AtomicInteger(0)
+    private val numOfReceivedMessages: AtomicInteger = AtomicInteger(0)
+    private val numOfProducers: AtomicInteger = AtomicInteger(0)
+    private val numOfConsumers: AtomicInteger = AtomicInteger(0)
 
     @Volatile private var startTimestamp: Long = 0
 
@@ -29,8 +28,10 @@ class ProducerConsumerBenchmarkUseCase {
         withContext(Dispatchers.IO) {
 
             numOfReceivedMessages.set(0)
+            numOfProducers.set(0)
+            numOfConsumers.set(0)
             startTimestamp = System.currentTimeMillis()
-            
+
             // producers init coroutine
             launch(Dispatchers.IO) {
                 for (i in 0 until NUM_OF_MESSAGES) {
@@ -54,18 +55,20 @@ class ProducerConsumerBenchmarkUseCase {
 
     }
 
-
     private fun CoroutineScope.startNewProducer(index: Int) = launch(Dispatchers.IO) {
+        Log.d("Producer", "producer ${numOfProducers.incrementAndGet()} started; " +
+                "on thread ${Thread.currentThread().name}");
         blockingQueue.put(index)
     }
 
     private fun CoroutineScope.startNewConsumer() = launch(Dispatchers.IO) {
+        Log.d("Consumer", "consumer ${numOfConsumers.incrementAndGet()} started; " +
+                "on thread ${Thread.currentThread().name}");
         val message = blockingQueue.take()
         if (message != -1) {
             numOfReceivedMessages.incrementAndGet()
         }
     }
-
 
     companion object {
         private const val NUM_OF_MESSAGES = 1000
