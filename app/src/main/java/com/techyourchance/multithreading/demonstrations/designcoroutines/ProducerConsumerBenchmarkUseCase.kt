@@ -3,10 +3,7 @@ package com.techyourchance.multithreading.demonstrations.designcoroutines
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.concurrent.atomic.AtomicInteger
 
 class ProducerConsumerBenchmarkUseCase {
@@ -33,18 +30,20 @@ class ProducerConsumerBenchmarkUseCase {
             startTimestamp = System.currentTimeMillis()
 
             // producers init coroutine
-            launch(Dispatchers.IO) {
+            val deferredProducers = async(Dispatchers.IO + NonCancellable) {
                 for (i in 0 until NUM_OF_MESSAGES) {
                     startNewProducer(i)
                 }
             }
 
             // consumers init coroutine
-            launch(Dispatchers.IO) {
+            val deferredConsumers = async(Dispatchers.IO + NonCancellable) {
                 for (i in 0 until NUM_OF_MESSAGES) {
                     startNewConsumer()
                 }
             }
+
+            awaitAll(deferredConsumers, deferredProducers)
 
         }
 
