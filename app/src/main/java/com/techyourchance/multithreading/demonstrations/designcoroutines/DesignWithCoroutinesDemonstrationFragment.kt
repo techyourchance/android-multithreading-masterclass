@@ -3,6 +3,7 @@ package com.techyourchance.multithreading.demonstrations.designcoroutines
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -15,6 +16,7 @@ import com.techyourchance.multithreading.R
 import com.techyourchance.multithreading.common.BaseFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class DesignWithCoroutinesDemonstrationFragment : BaseFragment() {
@@ -28,6 +30,8 @@ class DesignWithCoroutinesDemonstrationFragment : BaseFragment() {
     private lateinit var producerConsumerBenchmarkUseCase: ProducerConsumerBenchmarkUseCase
 
     private var showUiNonBlockedIndication : Boolean = false
+
+    private var job : Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +55,7 @@ class DesignWithCoroutinesDemonstrationFragment : BaseFragment() {
             txtExecutionTime.text = ""
             progressBar.visibility = VISIBLE
 
-            CoroutineScope(Dispatchers.Main).launch {
+            job = CoroutineScope(Dispatchers.Main).launch {
                 val result = producerConsumerBenchmarkUseCase.startBenchmark()
                 onBenchmarkCompleted(result)
             }
@@ -68,12 +72,12 @@ class DesignWithCoroutinesDemonstrationFragment : BaseFragment() {
         super.onStart()
         showUiNonBlockedIndication = true
         postUiNonBlockedIndication()
-        //producerConsumerBenchmarkUseCase.registerListener(this)
     }
     override fun onStop() {
+        Log.d("FragmentCoroutinesDemo", "onStop() called")
         super.onStop()
         showUiNonBlockedIndication = false
-        //producerConsumerBenchmarkUseCase.unregisterListener(this)
+        job?.apply { cancel() }
     }
 
     private fun postUiNonBlockedIndication() {
@@ -91,6 +95,7 @@ class DesignWithCoroutinesDemonstrationFragment : BaseFragment() {
 
 
     fun onBenchmarkCompleted(result: ProducerConsumerBenchmarkUseCase.Result) {
+        Log.d("FragmentCoroutinesDemo", "onBenchmarkCompleted() called")
         progressBar.visibility = INVISIBLE
         btnStart.isEnabled = true
         txtReceivedMessagesCount.text = "Received messages: ${result.numOfReceivedMessages}"
