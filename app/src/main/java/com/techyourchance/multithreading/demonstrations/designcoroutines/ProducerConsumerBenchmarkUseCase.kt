@@ -4,8 +4,11 @@ import android.os.Handler
 import android.os.Looper
 
 import com.techyourchance.multithreading.common.BaseObservable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -13,79 +16,54 @@ class ProducerConsumerBenchmarkUseCase {
 
     class Result(val executionTime: Long, val numOfReceivedMessages: Int)
 
-    private val reentrantLock = ReentrantLock()
-    private val lockCondition = reentrantLock.newCondition()
-
     private val uiHandler = Handler(Looper.getMainLooper())
 
     private val blockingQueue = MyBlockingQueue(BLOCKING_QUEUE_CAPACITY)
 
-    private var numOfFinishedConsumers: Int = 0
+    private var numOfReceivedMessages: AtomicInteger = AtomicInteger(0)
 
-    private var numOfReceivedMessages: Int = 0
-
-    private var startTimestamp: Long = 0
+    @Volatile private var startTimestamp: Long = 0
 
     suspend fun startBenchmark() : Result {
 
         withContext(Dispatchers.IO) {
 
-            reentrantLock.withLock {
-                numOfReceivedMessages = 0
-                numOfFinishedConsumers = 0
-                startTimestamp = System.currentTimeMillis()
-            }
-
-            // producers init thread
-            Thread {
+            numOfReceivedMessages.set(0)
+            startTimestamp = System.currentTimeMillis()
+            
+            // producers init coroutine
+            launch(Dispatchers.IO) {
                 for (i in 0 until NUM_OF_MESSAGES) {
                     startNewProducer(i)
                 }
-            }.start()
+            }
 
-            // consumers init thread
-            Thread {
+            // consumers init coroutine
+            launch(Dispatchers.IO) {
                 for (i in 0 until NUM_OF_MESSAGES) {
                     startNewConsumer()
                 }
-            }.start()
-
-
-            reentrantLock.withLock {
-                while (numOfFinishedConsumers < NUM_OF_MESSAGES) {
-                    try {
-                        lockCondition.await()
-                    } catch (e: InterruptedException) {
-                        return@withLock
-                    }
-                }
             }
+
         }
 
-        reentrantLock.withLock {
-            return Result(
-                    System.currentTimeMillis() - startTimestamp,
-                    numOfReceivedMessages
-            )
-        }
+        return Result(
+                System.currentTimeMillis() - startTimestamp,
+                numOfReceivedMessages.get()
+        )
+
     }
 
 
-    private fun startNewProducer(index: Int) {
-        Thread { blockingQueue.put(index) }.start()
+    private fun CoroutineScope.startNewProducer(index: Int) = launch(Dispatchers.IO) {
+        blockingQueue.put(index)
     }
 
-    private fun startNewConsumer() {
-        Thread {
-            val message = blockingQueue.take()
-            reentrantLock.withLock {
-                if (message != -1) {
-                    numOfReceivedMessages++
-                }
-                numOfFinishedConsumers++
-                lockCondition.signalAll()
-            }
-        }.start()
+    private fun CoroutineScope.startNewConsumer() = launch(Dispatchers.IO) {
+        val message = blockingQueue.take()
+        if (message != -1) {
+            numOfReceivedMessages.incrementAndGet()
+        }
     }
 
 
