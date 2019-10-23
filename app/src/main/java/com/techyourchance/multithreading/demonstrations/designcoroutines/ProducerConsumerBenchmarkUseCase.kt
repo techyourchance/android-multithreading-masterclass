@@ -10,24 +10,21 @@ class ProducerConsumerBenchmarkUseCase {
 
     class Result(val executionTime: Long, val numOfReceivedMessages: Int)
 
-    private val uiHandler = Handler(Looper.getMainLooper())
-
     private val blockingQueue = MyBlockingQueue(BLOCKING_QUEUE_CAPACITY)
 
     private val numOfReceivedMessages: AtomicInteger = AtomicInteger(0)
     private val numOfProducers: AtomicInteger = AtomicInteger(0)
     private val numOfConsumers: AtomicInteger = AtomicInteger(0)
 
-    @Volatile private var startTimestamp: Long = 0
-
     suspend fun startBenchmark() : Result {
 
-        withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
 
             numOfReceivedMessages.set(0)
             numOfProducers.set(0)
             numOfConsumers.set(0)
-            startTimestamp = System.currentTimeMillis()
+
+            val startTimestamp = System.currentTimeMillis()
 
             // producers init coroutine
             val deferredProducers = async(Dispatchers.IO + NonCancellable) {
@@ -45,12 +42,11 @@ class ProducerConsumerBenchmarkUseCase {
 
             awaitAll(deferredConsumers, deferredProducers)
 
+            Result(
+                    System.currentTimeMillis() - startTimestamp,
+                    numOfReceivedMessages.get()
+            )
         }
-
-        return Result(
-                System.currentTimeMillis() - startTimestamp,
-                numOfReceivedMessages.get()
-        )
 
     }
 
