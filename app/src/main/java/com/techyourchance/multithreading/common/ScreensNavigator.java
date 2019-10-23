@@ -13,6 +13,7 @@ import com.techyourchance.multithreading.demonstrations.threadwait.ThreadWaitDem
 import com.techyourchance.multithreading.demonstrations.uihandler.UiHandlerDemonstrationFragment;
 import com.techyourchance.multithreading.demonstrations.uithread.UiThreadDemonstrationFragment;
 import com.techyourchance.multithreading.exercises.exercise1.Exercise1Fragment;
+import com.techyourchance.multithreading.exercises.exercise10.Exercise10Fragment;
 import com.techyourchance.multithreading.exercises.exercise2.Exercise2Fragment;
 import com.techyourchance.multithreading.exercises.exercise3.Exercise3Fragment;
 import com.techyourchance.multithreading.exercises.exercise4.Exercise4Fragment;
@@ -121,5 +122,9 @@ public class ScreensNavigator {
 
     public void toDesignWithCoroutinesDemonstration() {
         mFragmentHelper.replaceFragment(DesignWithCoroutinesDemonstrationFragment.Companion.newInstance());
+    }
+
+    public void toExercise10Screen() {
+        mFragmentHelper.replaceFragment(Exercise10Fragment.Companion.newInstance());
     }
 }

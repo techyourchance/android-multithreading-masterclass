@@ -1,0 +1,22 @@
+Approach exercise 10 in three steps:
+
+Step 1: remove custom implementation of Observer pattern and wrap the current implementation of factorial computation algorithm in coroutine
+Step 2: refactor the internal implementation of the use case to coroutines, but keep the timeout detection logic intact
+Step 3: replace custom timeout detection logic with a call to "withTimeout" suspending function
+
+Hints for the solution:
+1. The idea behind structured concurrency is to make your multithreaded code look sequential. Therefore, "clean" solution with coroutines shouldn't have any class-level properties (no shared mutable state).
+2. Without mutable shared state, the solution should look similar to this (in principle, not in details):
+
+      val intermediateResult1 = intermediateResult1(<args>)
+      val intermediateResult2 = intermediateResult2(intermediateResult1)
+      val result = computeFinalResult(intermediateResult2)
+
+3. You might want to implement function with this signature in your solution:
+
+       private fun CoroutineScope.computeProductForRangeAsync(computationRange: ComputationRange) : Deferred<BigInteger> = async(Dispatchers.IO) {
+       }
+
+4. Note that top level suspending function will need to return either success or timeout to Fragment. You can use sealed class for the return type.
+
+
