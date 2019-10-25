@@ -54,6 +54,7 @@ class ProducerConsumerBenchmarkUseCase {
     private fun CoroutineScope.startNewProducer(index: Int) = launch(Dispatchers.IO) {
         Log.d("Producer", "producer ${numOfProducers.incrementAndGet()} started; " +
                 "on thread ${Thread.currentThread().name}");
+        Thread.sleep(DefaultConfiguration.DEFAULT_PRODUCER_DELAY_MS.toLong())
         blockingQueue.put(index)
     }
 

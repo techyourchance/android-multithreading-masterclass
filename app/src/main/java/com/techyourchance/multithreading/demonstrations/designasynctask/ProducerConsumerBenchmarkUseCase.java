@@ -102,7 +102,14 @@ public class ProducerConsumerBenchmarkUseCase extends BaseObservable<ProducerCon
 
 
     private void startNewProducer(final int index) {
-        new Thread(() -> mBlockingQueue.put(index)).start();
+        new Thread(() -> {
+            try {
+                Thread.sleep(DefaultConfiguration.DEFAULT_PRODUCER_DELAY_MS);
+            } catch (InterruptedException e) {
+                return;
+            }
+            mBlockingQueue.put(index);
+        }).start();
     }
 
     private void startNewConsumer() {

@@ -126,6 +126,11 @@ public class SolutionExercise5Fragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(DefaultConfiguration.DEFAULT_PRODUCER_DELAY_MS);
+                } catch (InterruptedException e) {
+                    return;
+                }
                 mBlockingQueue.put(index);
             }
         }).start();

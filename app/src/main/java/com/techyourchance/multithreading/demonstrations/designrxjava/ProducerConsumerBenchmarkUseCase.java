@@ -41,7 +41,15 @@ public class ProducerConsumerBenchmarkUseCase {
     public Observable<Result> startBenchmark() {
         return Flowable.range(0, NUM_OF_MESSAGES)
                         .flatMap(id -> Flowable
-                                .fromCallable(() -> { mBlockingQueue.put(id); return id; }) // <-- generate message
+                                .fromCallable(() -> {
+                                    try {
+                                        Thread.sleep(DefaultConfiguration.DEFAULT_PRODUCER_DELAY_MS);
+                                    } catch (InterruptedException e) {
+                                        return id;
+                                    }
+                                    mBlockingQueue.put(id);
+                                    return id;
+                                }) // <-- generate message
                                 .subscribeOn(Schedulers.io())
                         )
                         .parallel(NUM_OF_MESSAGES)
