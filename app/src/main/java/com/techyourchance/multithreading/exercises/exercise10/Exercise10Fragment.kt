@@ -15,6 +15,7 @@ import com.techyourchance.multithreading.common.BaseFragment
 
 import java.math.BigInteger
 import androidx.fragment.app.Fragment
+import com.techyourchance.multithreading.DefaultConfiguration
 
 class Exercise10Fragment : BaseFragment(), ComputeFactorialUseCase.Listener {
 
@@ -107,6 +108,6 @@ class Exercise10Fragment : BaseFragment(), ComputeFactorialUseCase.Listener {
         fun newInstance(): Fragment {
             return Exercise10Fragment()
         }
-        private const val MAX_TIMEOUT_MS = 1000
+        private const val MAX_TIMEOUT_MS = DefaultConfiguration.DEFAULT_FACTORIAL_TIMEOUT_MS
     }
 }

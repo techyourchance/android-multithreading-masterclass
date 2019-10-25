@@ -15,6 +15,7 @@ import com.techyourchance.multithreading.common.BaseFragment
 
 import java.math.BigInteger
 import androidx.fragment.app.Fragment
+import com.techyourchance.multithreading.DefaultConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -111,6 +112,6 @@ class SolutionExercise10Fragment : BaseFragment() {
         fun newInstance(): Fragment {
             return SolutionExercise10Fragment()
         }
-        private const val MAX_TIMEOUT_MS = 1000
+        private const val MAX_TIMEOUT_MS = DefaultConfiguration.DEFAULT_FACTORIAL_TIMEOUT_MS
     }
 }

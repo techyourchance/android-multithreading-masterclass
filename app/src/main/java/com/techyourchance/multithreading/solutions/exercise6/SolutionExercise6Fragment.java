@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.techyourchance.multithreading.DefaultConfiguration;
 import com.techyourchance.multithreading.R;
 import com.techyourchance.multithreading.common.BaseFragment;
 
@@ -25,7 +26,7 @@ public class SolutionExercise6Fragment extends BaseFragment implements ComputeFa
         return new SolutionExercise6Fragment();
     }
 
-    private final static int MAX_TIMEOUT_MS = 1000;
+    private static int MAX_TIMEOUT_MS = DefaultConfiguration.DEFAULT_FACTORIAL_TIMEOUT_MS;
 
     private EditText mEdtArgument;
     private EditText mEdtTimeout;

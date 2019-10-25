@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.techyourchance.multithreading.DefaultConfiguration;
 import com.techyourchance.multithreading.R;
 import com.techyourchance.multithreading.common.BaseFragment;
 
@@ -29,7 +30,7 @@ public class SolutionExercise4Fragment extends BaseFragment {
         return new SolutionExercise4Fragment();
     }
 
-    private final static int MAX_TIMEOUT_MS = 1000;
+    private static int MAX_TIMEOUT_MS = DefaultConfiguration.DEFAULT_FACTORIAL_TIMEOUT_MS;
 
     private final Handler mUiHandler = new Handler(Looper.getMainLooper());
 

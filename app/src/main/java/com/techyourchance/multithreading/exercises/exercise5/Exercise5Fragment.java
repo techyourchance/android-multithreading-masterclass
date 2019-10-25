@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.techyourchance.multithreading.DefaultConfiguration;
 import com.techyourchance.multithreading.R;
 import com.techyourchance.multithreading.common.BaseFragment;
 
@@ -27,8 +28,8 @@ public class Exercise5Fragment extends BaseFragment {
         return new Exercise5Fragment();
     }
 
-    private static final int NUM_OF_MESSAGES = 1000;
-    private static final int BLOCKING_QUEUE_CAPACITY = 5;
+    private static final int NUM_OF_MESSAGES = DefaultConfiguration.DEFAULT_NUM_OF_MESSAGES;
+    private static final int BLOCKING_QUEUE_CAPACITY = DefaultConfiguration.DEFAULT_BLOCKING_QUEUE_SIZE;
 
     private final Object LOCK = new Object();
 
