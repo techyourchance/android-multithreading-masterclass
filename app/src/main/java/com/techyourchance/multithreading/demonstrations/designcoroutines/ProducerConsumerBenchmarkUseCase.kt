@@ -3,6 +3,7 @@ package com.techyourchance.multithreading.demonstrations.designcoroutines
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.techyourchance.multithreading.DefaultConfiguration
 import kotlinx.coroutines.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -66,8 +67,8 @@ class ProducerConsumerBenchmarkUseCase {
     }
 
     companion object {
-        private const val NUM_OF_MESSAGES = 1000
-        private const val BLOCKING_QUEUE_CAPACITY = 5
+        private const val NUM_OF_MESSAGES = DefaultConfiguration.DEFAULT_NUM_OF_MESSAGES
+        private const val BLOCKING_QUEUE_CAPACITY = DefaultConfiguration.DEFAULT_BLOCKING_QUEUE_SIZE
     }
 
 }

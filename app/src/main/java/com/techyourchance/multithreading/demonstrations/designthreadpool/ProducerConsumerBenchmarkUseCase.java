@@ -2,6 +2,7 @@ package com.techyourchance.multithreading.demonstrations.designthreadpool;
 
 import android.os.Handler;
 
+import com.techyourchance.multithreading.DefaultConfiguration;
 import com.techyourchance.multithreading.common.BaseObservable;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -31,8 +32,8 @@ public class ProducerConsumerBenchmarkUseCase extends BaseObservable<ProducerCon
         }
     }
 
-    private static final int NUM_OF_MESSAGES = 1000;
-    private static final int BLOCKING_QUEUE_CAPACITY = 5;
+    private static final int NUM_OF_MESSAGES = DefaultConfiguration.DEFAULT_NUM_OF_MESSAGES;
+    private static final int BLOCKING_QUEUE_CAPACITY = DefaultConfiguration.DEFAULT_BLOCKING_QUEUE_SIZE;
 
     private final Object LOCK = new Object();
 
