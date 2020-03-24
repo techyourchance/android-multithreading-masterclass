@@ -69,9 +69,7 @@ class ComputeFactorialUseCase {
         return@coroutineScope withContext(Dispatchers.IO) {
             return@withContext computationRanges.map {
                 computeProductForRangeAsync(it)
-            }.map {
-                it.await()
-            }
+            }.awaitAll()
         }
     }
 
