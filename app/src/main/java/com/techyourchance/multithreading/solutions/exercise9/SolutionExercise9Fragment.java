@@ -97,7 +97,7 @@ public class SolutionExercise9Fragment extends BaseFragment {
 
     @Override
     protected String getScreenTitle() {
-        return "Exercise 8";
+        return "Exercise 9";
     }
 
     private int getTimeout() {
